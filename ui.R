@@ -14,17 +14,21 @@ shinyUI(fluidPage(
   # Application title
   titlePanel("Text Prediction App"),
   
-  # Sidebar with a slider input for number of bins 
+  # Sidebar with input for text to predict 
   sidebarLayout(
      sidebarPanel(
        #h3("Enter two words:"),
-       textInput("box1", "Enter text:", value = "na")
+       textInput("box1", "Enter text:", value = "")
      ),
     
     # Show a plot of the generated distribution
     mainPanel(
-       # plotOutput("distPlot")
+      # plotOutput("distPlot")
+      
+      actionButton("predButton", "Predict"),
+      actionButton("clearButton", "Clear"),
       textOutput("out1")
+      
     )
   )
 ))

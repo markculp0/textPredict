@@ -17,6 +17,7 @@ shinyServer(function(input, output, session) {
     # Get text box input
     output$out1 <- renderText({
       
+      # Split input string
       inText <- input$box1
       words <- strsplit(inText," ",fixed = T)[[1]]
       lastWord3 <- "don't know yet"
@@ -33,6 +34,12 @@ shinyServer(function(input, output, session) {
       word2Chars <- nchar(lastWord2)
       word1Chars <- nchar(lastWord1)
       
+      
+      #wrdFile <- readRDS("n1/a1.rds")
+      
+      #wrdLine <- grepl("adam",wrdFile$wrd2)
+      
+      #lastWord3 <- wrdFile[wrdLine,3]
       
       # Add predicted word to phrase
       paste(inText, lastWord3)

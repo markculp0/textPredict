@@ -1,19 +1,10 @@
 
-# =======
-# Predict
-# =======
+# =================
+# Predict App Tests 
+# =================
 
-#textStr <- c("I love dogs", "I hate cats")
-#textStr <- paste(textStr[1], " and me.")
 
-#inText <- "I love dogs"
-#words <- strsplit(inText," ",fixed = T)[[1]]
-
-#length(words)
-
-# ---
-
-wrdFile <- readRDS("n1/a1.rds")
+wordFile <- readRDS("n1/a1.rds")
 
 # m4 <- matrix(numeric(20),nrow=5,ncol=4)
 m4 <- matrix(character(20),nrow=5,ncol=4)
@@ -23,17 +14,22 @@ m4 <- matrix(character(20),nrow=5,ncol=4)
 #lastWord1 <- "poem"
 
 #Is not there
-lastWord2 <- "adampants"
-lastWord1 <- "adam" # not there
+lastWord2 <- "adampants"  # not there
+lastWord1 <- "adam" 
 
 #End of list
 #lastWord2 <- "amy"
 #lastWord1 <- "yogurtblob"
 
-# wrdLine <- grepl("adam",wrdFile$wrd2)
+# wrdLine <- grepl("adam",wordFile$wrd2)
 
-# Straight srch
-m4 <- with(wrdFile, wrdFile[wrd1 == lastWord1 & wrd2 == lastWord2,])
+# =================================================
+# Word Search Code
+# ----------------
+# =============== begin word search ===============
+
+# Search with 2 words
+m4 <- with(wordFile, wordFile[wrd1 == lastWord1 & wrd2 == lastWord2,])
 
 # Match with 2 words
 if (nrow(m4) > 0) 
@@ -41,13 +37,13 @@ if (nrow(m4) > 0)
 # No match w 2 words
 } else {  # outer else
   # Search w empty word 1
-  m4 <- with(wrdFile, wrdFile[wrd1 == "" & wrd2 == lastWord2,])
+  m4 <- with(wordFile, wordFile[wrd1 == "" & wrd2 == lastWord2,])
   # Match with empty word 1
   if (nrow(m4) > 0) {
     lastWord3 <- m4[1,3]
   } else {  # inner else
     # Search w 1 word
-    m4 <- with(wrdFile, wrdFile[wrd2 == lastWord2,])
+    m4 <- with(wordFile, wordFile[wrd2 == lastWord2,])
     if (nrow(m4) > 0) {
       lastWord3 <- m4[1,3]
     } else {
@@ -58,22 +54,28 @@ if (nrow(m4) > 0)
 # if (nrow(m4) == 0 | m4[1,2] == "")
 # or
 # W grepl
-# wrdLine <- with(wrdFile, wrdFile[grepl(lastWord1,wrd1) & grepl(lastWord2,wrd2),])
-# lastWord3 <- wrdFile[wrdLine,3]
+# wrdLine <- with(wordFile, wordFile[grepl(lastWord1,wrd1) & grepl(lastWord2,wrd2),])
+# lastWord3 <- wordFile[wrdLine,3]
 
 
-# ================ end search =================
+# ================ end word search ==================
 
-#blob <- substr(lastWord2,1,4)
-#blob <- paste("^",blob)
-#m4 <- with(wrdFile, wrdFile[wrd2 == blob,])
+
+
+# ===================================================
+# Word File Selection Code
+#-------------------------
+# ============== begin wordFile select ==============
 
 lastWord2 <- "cat"
 #lastWord1 <- "poem"
 
+# Get substrings of lastWord2
 ltr1 <- substr(lastWord2,1,1)
 ltr2 <- substr(lastWord2,1,2)
 ltr3 <- substr(lastWord2,1,3)
+
+# Open appropriate wordFile
 if (ltr2 >= "a" & ltr2 < "aa") {
   wordFile <- readRDS("n1/aa.rds")
 } else if (ltr2 >= "aa" & ltr2 <= "am") {
@@ -159,8 +161,9 @@ if (ltr2 >= "a" & ltr2 < "aa") {
 } else if (ltr1 == "x" | ltr1 == "y" | ltr1 == "z") {
   wordFile <- readRDS("n7/xyz.rds")
 }
+# ============== end wordFile select =================
 
 
-# ================ end file select =================
+
 
 

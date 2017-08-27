@@ -164,6 +164,20 @@ if (ltr2 >= "a" & ltr2 < "aa") {
 # ============== end wordFile select =================
 
 
+inText <- "I-d"
+inText <- tolower(inText)
+
+inText <- gsub("-", "\001", inText, fixed = TRUE)
+inText <- gsub("[[:punct:]]+", "", inText)
+inText <- gsub("\001", "-", inText, fixed = TRUE)
+
+
+
+
+
+
+
+
 
 
 

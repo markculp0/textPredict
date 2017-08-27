@@ -17,8 +17,66 @@ shinyServer(function(input, output, session) {
     # Get text box input
     output$out1 <- renderText({
       
-      # Split input string
+      # Get input string
       inText <- input$box1
+      
+      # Convert to lower
+      inText <- tolower(inText)
+      
+      # Ensure text is latin chars
+      inText <- iconv(inText, to = "latin1")
+      
+      # Remove extended latin chars
+      inText <- gsub("[\x7b-\xff]","",inText)
+      
+      # Remove certain oddities
+      inText <- gsub("(\\s)-(\\s)"," ",inText) # Solo dashes
+      inText <- gsub("(\\s)-(\\w)"," \\2",inText) # Leading dashes
+      inText <- gsub("(\\w)-(\\s)","\\1 ",inText) # Trailing dashes
+      inText <- gsub("(\\w)#(\\s)","\\1 ",inText) # Trailing pounds
+      
+      # Some fixes for contractions
+      inText <- gsub("\\drd", " ", inText) 
+      inText <- gsub("\\dth", " ", inText) 
+      inText <- gsub("\\sdon't\\s", " do not ", inText) 
+      inText <- gsub("\\sdont\\s", " do not ", inText)
+      
+      inText <- gsub("it's", "it is", inText) 
+      inText <- gsub("'twas", "it was", inText)
+      inText <- gsub("\\stwas\\s", " it was ", inText)
+      inText <- gsub("'tis", "it is", inText) 
+      
+      inText <- gsub("won't", "will not", inText)
+      inText <- gsub("\\swont\\s", " will not ", inText)
+      inText <- gsub("can't", "can not", inText) 
+      inText <- gsub("\\scant\\s", " can not ", inText)
+      
+      inText <- gsub("let's", "let us", inText) 
+      inText <- gsub("\\slets\\s", " let us ", inText) 
+      inText <- gsub("that's", "that is", inText)
+      inText <- gsub("\\sthats\\s", " that is ", inText)
+      
+      inText <- gsub("'m\\s", " am ", inText)
+      inText <- gsub("\\im\\s", " i am ", inText)
+      inText <- gsub("n't\\s", " not ", inText) 
+      inText <- gsub("\\sdont\\s", " do not ", inText)
+      inText <- gsub("\\swont\\s", " will not ", inText)
+      inText <- gsub("\\scant\\s", " can not ", inText)
+      
+      inText <- gsub("'re\\s", " are ", inText)
+      inText <- gsub("'d\\s", " would ", inText) 
+      inText <- gsub("'ll\\s", " will ", inText)
+      inText <- gsub("'ve\\s", " have ", inText)
+      
+      # Remove numbers 
+      inText <- gsub("[0-9]","",inText)
+      
+      # Remove punctuation except for dashes
+      inText <- gsub("-", "\001", inText, fixed = TRUE)
+      inText <- gsub("[[:punct:]]+", "", inText)
+      inText <- gsub("\001", "-", inText, fixed = TRUE)
+      
+      # Split input string
       words <- strsplit(inText," ",fixed = T)[[1]]
       
       # Get last word in text string
@@ -28,6 +86,10 @@ shinyServer(function(input, output, session) {
       # Get second to last word
       lastWord1Cnt <- lastWord2Cnt - 1
       lastWord1 <- words[lastWord1Cnt]
+      
+      # Remove certain oddities
+      #lastWord1 <- gsub("(\\s)-(\\s)","",lastWord1) # Solo dashes
+      #lastWord2 <- gsub("(\\s)-(\\s)","",lastWord2) # Solo dashes
       
       # Get number of words in phrase
       #word2Chars <- nchar(lastWord2)
@@ -155,6 +217,17 @@ shinyServer(function(input, output, session) {
       } # end outer else 
       
       # ============= end word search ===============
+      
+      
+      # Some fixes for failing to preserve single quotes
+      if (lastWord3 == "id") {lastWord3 <- "i'd"}
+      if (lastWord3 == "hed") {lastWord3 <- "he'd"}
+      if (lastWord3 == "theyd") {lastWord3 <- "they'd"}
+      
+      # Fixes to user's text also
+      inText <- gsub("\\bid\\b","i'd",inText)
+      inText <- gsub("\\bhed\\b","he'd",inText)
+      inText <- gsub("\\btheyd\\b","they'd",inText)
       
       # Add predicted word to phrase
       paste(inText, lastWord3)

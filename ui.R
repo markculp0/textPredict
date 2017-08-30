@@ -27,8 +27,9 @@ shinyUI(fluidPage(
       
       actionButton("predButton", "Predict"),
       actionButton("clearButton", "Clear"),
-      textOutput("out1")
-      
+      textOutput("out1"),
+      h4("Alternative predictions:"),
+      textOutput("out2")
     )
   )
 ))
